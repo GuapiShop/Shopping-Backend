@@ -3,6 +3,8 @@ using API_Shopping.Interfaces;
 using API_Shopping.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
+using System.Linq.Expressions;
 
 namespace API_Shopping.Services
 {
@@ -23,29 +25,49 @@ namespace API_Shopping.Services
         }
 
         //List product
-        public async Task<IEnumerable<Product>> getProducts()
+        public async Task<IEnumerable<Product>> GetProducts()
         {
             return await _context.Products.ToListAsync();
         }
 
-
-
-
-        public Task<bool> DeleteProduct(int id)
+        //Get a single product
+        public async Task<Product> GetProductById(long id)
         {
-            throw new NotImplementedException();
+            return await _context.Products.FindAsync(id);
         }
-
-        public Task<Product> GetProductById(int id)
-        {
-            throw new NotImplementedException();
-        }
-
         
-
-        public Task<bool> UpdateProduct(int id, Product product)
+        //Update product
+        public async Task<bool> UpdateProduct(long id, Product product)
         {
-            throw new NotImplementedException();
+            _context.Entry(product).State = EntityState.Modified;
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        // delete product
+        public async Task<bool> DeleteProduct(Product product)
+        {
+            _context.Products.Remove(product);
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException) {
+                return false;
+            }
+            return true;
+        }
+
+        public bool ProductExists(long id)
+        {
+            return _context.Products.Any(e => e.Id == id);
         }
     }
 }

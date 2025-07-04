@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
 using API_Shopping.Context;
 using API_Shopping.Models;
-using API_Shopping.Services;
 using API_Shopping.Interfaces;
 
 namespace API_Shopping.Controllers
@@ -16,12 +9,10 @@ namespace API_Shopping.Controllers
     [ApiController]
     public class ProductsController : ControllerBase
     {
-        private readonly AppDbContext _context;
         private readonly IProductService _productService;
 
-        public ProductsController(AppDbContext context, ProductService productService)
+        public ProductsController(AppDbContext context, IProductService productService)
         {
-            _context = context;
             _productService = productService;
         }
 
@@ -30,7 +21,8 @@ namespace API_Shopping.Controllers
         [HttpPost]
         public async Task<ActionResult<Product>> AddProduct(Product product)
         {
-            if (_productService.AddProduct(product) != null)
+            var result = await _productService.AddProduct(product);
+            if ( result != null)
             {
                 return CreatedAtAction("GetProduct", new { id = product.Id }, product);
             }
@@ -55,18 +47,18 @@ namespace API_Shopping.Controllers
             }
         }
 
-        // GET: api/Products/5
+        // GET: api/Products/number
         [HttpGet("{id}")]
         public async Task<ActionResult<Product>> GetProduct(long id)
         {
-            var product = await _context.Products.FindAsync(id);
+            var product = await _productService.GetProductById(id);
 
             if (product == null)
             {
                 return NotFound();
             }
 
-            return product;
+            return Ok(product);
         }
 
         // PUT: api/Products/5
@@ -79,48 +71,37 @@ namespace API_Shopping.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(product).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ProductExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+            if (await _productService.UpdateProduct(id, product)) {
+                return NoContent();
             }
 
-            return NoContent();
+            if (!_productService.ProductExists(id))
+            {
+                return NotFound();
+            }
+            else
+            {
+                return StatusCode(500);
+            } 
         }
-
-        
 
         // DELETE: api/Products/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProduct(long id)
         {
-            var product = await _context.Products.FindAsync(id);
+            var product = await _productService.GetProductById(id);
+
             if (product == null)
             {
                 return NotFound();
             }
 
-            _context.Products.Remove(product);
-            await _context.SaveChangesAsync();
+            if (await _productService.DeleteProduct(product))
+            {
+                return NoContent();
+            }
 
-            return NoContent();
-        }
-
-        private bool ProductExists(long id)
-        {
-            return _context.Products.Any(e => e.Id == id);
-        }
+            return StatusCode(500);
+        } 
     }
 }

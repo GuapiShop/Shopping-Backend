@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "ALXDUt1xmOQ=",
+  "dgSpecHash": "mpeD0mFFNBo=",
   "success": true,
-  "projectFilePath": "C:\\Users\\denni\\source\\repos\\API_Shopping\\API_Shopping\\API_Shopping.csproj",
+  "projectFilePath": "C:\\Users\\denni\\Documents\\Shopping Proyect\\API_Shopping\\API_Shopping\\API_Shopping.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\denni\\.nuget\\packages\\humanizer\\2.14.1\\humanizer.2.14.1.nupkg.sha512",
     "C:\\Users\\denni\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
