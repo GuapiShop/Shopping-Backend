@@ -11,7 +11,7 @@ namespace API_Shopping.Controllers
     {
         private readonly IProductService _productService;
 
-        public ProductsController(AppDbContext context, IProductService productService)
+        public ProductsController(IProductService productService)
         {
             _productService = productService;
         }
@@ -75,7 +75,7 @@ namespace API_Shopping.Controllers
                 return NoContent();
             }
 
-            if (!_productService.ProductExists(id))
+            if (!await _productService.ProductExists(id))
             {
                 return NotFound();
             }

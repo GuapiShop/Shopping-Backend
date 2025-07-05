@@ -1,10 +1,7 @@
 ﻿using API_Shopping.Context;
 using API_Shopping.Interfaces;
 using API_Shopping.Models;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Data;
-using System.Linq.Expressions;
 
 namespace API_Shopping.Services
 {
@@ -39,9 +36,18 @@ namespace API_Shopping.Services
         //Update product
         public async Task<bool> UpdateProduct(long id, Product product)
         {
-            _context.Entry(product).State = EntityState.Modified;
+            Product productFind = await GetProductById(id);
             try
             {
+                if (productFind == null) return false;
+
+                productFind.Name = product.Name;
+                productFind.Description = product.Description;
+                productFind.Category = product.Category;
+                productFind.CodeCABYS = product.CodeCABYS;
+                productFind.Quantity = product.Quantity;
+                productFind.Price = product.Price;
+
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
@@ -65,9 +71,9 @@ namespace API_Shopping.Services
             return true;
         }
 
-        public bool ProductExists(long id)
+        public async Task<bool> ProductExists(long id)
         {
-            return _context.Products.Any(e => e.Id == id);
+            return await _context.Products.AnyAsync(e => e.Id == id);
         }
     }
 }
