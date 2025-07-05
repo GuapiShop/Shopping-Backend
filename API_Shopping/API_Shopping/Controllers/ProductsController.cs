@@ -19,12 +19,12 @@ namespace API_Shopping.Controllers
         // POST: api/Products
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Product>> AddProduct(Product product)
+        public async Task<ActionResult<Product>> AddProduct(ProductCreateDTO product)
         {
-            var result = await _productService.AddProduct(product);
+            Product result = await _productService.AddProduct(product);
             if ( result != null)
             {
-                return CreatedAtAction("GetProduct", new { id = product.Id }, product);
+                return CreatedAtAction("GetProduct", new { id = result.Id }, product);
             }
             else 
             { 

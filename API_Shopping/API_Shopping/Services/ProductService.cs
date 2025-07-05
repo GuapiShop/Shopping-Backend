@@ -14,11 +14,20 @@ namespace API_Shopping.Services
         }
 
         //Add product
-        public async Task<Product> AddProduct(Product product)
+        public async Task<Product> AddProduct(ProductCreateDTO productDto)
         {
-            _context.Products.Add(product);
+            var tempProduct = new Product
+            {
+                Name = productDto.Name,
+                Description = productDto.Description,
+                Category = productDto.Category,
+                CodeCABYS = productDto.CodeCABYS,
+                Quantity = productDto.Quantity,
+                Price = productDto.Price
+            };
+            _context.Products.Add(tempProduct);
             await _context.SaveChangesAsync();
-            return product;
+            return tempProduct;
         }
 
         //List product
