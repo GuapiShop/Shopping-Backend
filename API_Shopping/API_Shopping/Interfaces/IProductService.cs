@@ -10,6 +10,6 @@ namespace API_Shopping.Interfaces
         public Task<Product> AddProduct(Product product);
         public Task<bool> UpdateProduct(long id, Product product);
         public Task<bool> DeleteProduct(Product product);
-        public bool ProductExists(long id);
+        public Task<bool> ProductExists(long id);
     }
 }
