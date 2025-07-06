@@ -31,7 +31,7 @@ namespace API_Shopping.Controllers
 
         // GET: api/Users/number
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser(long id)
+        public async Task<ActionResult<UserDTO>> GetUser(long id)
         {
             var user = await _userService.GetUserById(id);
 
@@ -46,21 +46,23 @@ namespace API_Shopping.Controllers
         // PUT: api/Users/number
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(long id, User user)
+        public async Task<IActionResult> PutUser(long id, UpdateUserDTO user)
         {
             if (id != user.Id)
             {
                 return BadRequest();
             }
 
+            if (!await _userService.UserExists(id))
+            {
+                return NotFound("User not found");
+            }
+
             if (await _userService.UpdateUser(id, user))
             { 
                 return NoContent();
             }
-
-            if (!await _userService.UserExists(id)) {
-                return BadRequest();
-            } 
+            
             return StatusCode(500);
         }
 
@@ -82,33 +84,35 @@ namespace API_Shopping.Controllers
 
         // PUT: api/Users/disable/number
         [HttpPut("disable/{id}")]
-        public async Task<IActionResult> DisableUser(long id, User user)
+        public async Task<IActionResult> DisableUser(long id)
         {
-            var userTemp = await _userService.GetUserById(id);
-            if (userTemp == null)
+            if (!await _userService.UserExists(id))
             {
-                return NotFound();
+                return NotFound("User not found");
             }
-            if (await _userService.DisableUser(id, user)) 
+
+            if (await _userService.DisableUser(id)) 
             {
                 return NoContent();
             }
+
             return StatusCode(500);
         }
 
         // PUT: api/Users/enable/number
         [HttpPut("enable/{id}")]
-        public async Task<IActionResult> EnableUser(long id, User user)
+        public async Task<IActionResult> EnableUser(long id)
         {
-            var userTemp = await _userService.GetUserById(id);
-            if (userTemp == null)
+            if (!await _userService.UserExists(id))
             {
-                return NotFound();
+                return NotFound("User not found");
             }
-            if (await _userService.EnableUser(id, user))
+
+            if (await _userService.EnableUser(id))
             {
                 return NoContent();
             }
+
             return StatusCode(500);
         }
     }
