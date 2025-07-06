@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using API_Shopping.Context;
 using API_Shopping.Models;
 using API_Shopping.Interfaces;
 
@@ -79,10 +78,7 @@ namespace API_Shopping.Controllers
             {
                 return NotFound();
             }
-            else
-            {
-                return StatusCode(500);
-            } 
+            return StatusCode(500);
         }
 
         // DELETE: api/Products/5
