@@ -17,9 +17,10 @@ namespace API_Shopping.Services
         {
             var userTemp = new User
             {
-                Username = user.username,
-                Password = user.password,
-                Email = user.email,
+                Username = user.Username,
+                Password = BCrypt.Net.BCrypt.HashPassword(user.Password),
+                Email = user.Email,
+                IsActive = true,
                 CreateAt = DateTime.Now,
             };
             _context.Users.Add(userTemp);
@@ -27,15 +28,13 @@ namespace API_Shopping.Services
             return userTemp;
         }
 
-        public async Task<bool> DisableUser(long id, User user)
+        public async Task<bool> DisableUser(long id)
         {
-            User userTemp = await GetUserById(id);
-            if (userTemp == null) { return false; }
-
+            UserDTO userTemp = await GetUserById(id);
             try
             {
-                user.IsActive = false;
-                user.UpdateAt = DateTime.Now;
+                userTemp.IsActive = false;
+                userTemp.UpdateAt = DateTime.Now;
                 await _context.SaveChangesAsync();
                 return true;
             }
@@ -45,15 +44,13 @@ namespace API_Shopping.Services
             }
         }
 
-        public async Task<bool> EnableUser(long id, User user)
+        public async Task<bool> EnableUser(long id)
         {
-            User userTemp = await GetUserById(id);
-            if (userTemp == null) { return false; }
-
+            UserDTO userTemp = await GetUserById(id);
             try
             {
-                user.IsActive = true;
-                user.UpdateAt = DateTime.Now;
+                userTemp.IsActive = true;
+                userTemp.UpdateAt = DateTime.Now;
                 await _context.SaveChangesAsync();
                 return true;
             }
@@ -68,28 +65,45 @@ namespace API_Shopping.Services
             return await _context.Users.AnyAsync(e => e.Id == id);
         }
 
-        public async Task<User> GetUserById(long id)
+        public async Task<UserDTO> GetUserById(long id)
         {
-            return await _context.Users.FindAsync(id);
+            return await _context.Users
+                .Where(u => u.Id == id)
+                .Select(u => new UserDTO
+                {
+                    Id = u.Id,
+                    Email = u.Email,
+                    CreateAt = u.CreateAt,
+                    UpdateAt = u.UpdateAt,
+                    IsActive = u.IsActive,
+                    Username = u.Username,
+                }).FirstOrDefaultAsync();
         }
 
-        public async Task<IEnumerable<User>> GetUsers()
+        public async Task<IEnumerable<UserDTO>> GetUsers()
         {
-            return await _context.Users.ToListAsync();
+            return await _context.Users.Select( 
+                u => new UserDTO {
+                    Id = u.Id,
+                    Email = u.Email,
+                    CreateAt = u.CreateAt,
+                    IsActive = u.IsActive,
+                    UpdateAt = u.UpdateAt,
+                    Username = u.Username
+            }).ToListAsync();
         }
 
-        public async Task<bool> UpdateUser(long id, User user)
+        public async Task<bool> UpdateUser(long id, UpdateUserDTO user)
         {
-            User userTemp = await GetUserById(id);
+            UserDTO userTemp = await GetUserById(id);
 
             if (userTemp == null) { return false; }
 
             try
             {
-                user.Username = userTemp.Username;
-                user.Password = userTemp.Password;
-                user.Email = userTemp.Email;
-                user.UpdateAt = DateTime.Now;
+                userTemp.Username = user.Username;
+                userTemp.Email = user.Email;
+                userTemp.UpdateAt = DateTime.Now;
                 await _context.SaveChangesAsync();
                 return true;
             }
@@ -98,5 +112,6 @@ namespace API_Shopping.Services
                 return false;
             }
         }
+
     }
 }

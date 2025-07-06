@@ -479,3 +479,4 @@ C:\Users\denni\Documents\Shopping Proyect\API_Shopping\API_Shopping\obj\Debug\ne
 C:\Users\denni\Documents\Shopping Proyect\API_Shopping\API_Shopping\obj\Debug\net8.0\API_Shopping.pdb
 C:\Users\denni\Documents\Shopping Proyect\API_Shopping\API_Shopping\obj\Debug\net8.0\API_Shopping.genruntimeconfig.cache
 C:\Users\denni\Documents\Shopping Proyect\API_Shopping\API_Shopping\obj\Debug\net8.0\ref\API_Shopping.dll
+C:\Users\denni\Documents\Shopping Proyect\API_Shopping\API_Shopping\bin\Debug\net8.0\BCrypt.Net-Next.dll
