@@ -1,5 +1,4 @@
 ﻿using API_Shopping.Models;
-using System.Diagnostics.Eventing.Reader;
 
 namespace API_Shopping.Interfaces
 {
