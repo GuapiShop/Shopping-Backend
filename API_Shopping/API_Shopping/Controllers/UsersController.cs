@@ -1,5 +1,7 @@
 ﻿using API_Shopping.Interfaces;
 using API_Shopping.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API_Shopping.Controllers
@@ -17,6 +19,7 @@ namespace API_Shopping.Controllers
 
         // GET: api/Users
         [HttpGet]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
             var users = await _userService.GetUsers();
@@ -31,6 +34,7 @@ namespace API_Shopping.Controllers
 
         // GET: api/Users/number
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<ActionResult<UserDTO>> GetUser(long id)
         {
             var user = await _userService.GetUserById(id);
@@ -46,7 +50,8 @@ namespace API_Shopping.Controllers
         // PUT: api/Users/number
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(long id, UpdateUserDTO user)
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<IActionResult> PutUser(long id, UserUpdateDTO user)
         {
             if (id != user.Id)
             {
@@ -69,6 +74,7 @@ namespace API_Shopping.Controllers
         // POST: api/Users
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [AllowAnonymous]
         public async Task<ActionResult<User>> PostUser(UserCreateDTO user)
         {
             User result = await _userService.AddUser(user);
@@ -84,6 +90,7 @@ namespace API_Shopping.Controllers
 
         // PUT: api/Users/disable/number
         [HttpPut("disable/{id}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> DisableUser(long id)
         {
             if (!await _userService.UserExists(id))
@@ -101,6 +108,7 @@ namespace API_Shopping.Controllers
 
         // PUT: api/Users/enable/number
         [HttpPut("enable/{id}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> EnableUser(long id)
         {
             if (!await _userService.UserExists(id))

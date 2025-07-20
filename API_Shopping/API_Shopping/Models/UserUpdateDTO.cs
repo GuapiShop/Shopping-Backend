@@ -1,6 +1,6 @@
 ﻿namespace API_Shopping.Models
 {
-    public class UpdateUserDTO
+    public class UserUpdateDTO
     {
         public long Id { get; set; }
         public string Username { get; set; }

@@ -18,7 +18,7 @@ namespace API_Shopping.Services
             var userTemp = new User
             {
                 Username = user.Username,
-                Password = BCrypt.Net.BCrypt.HashPassword(user.Password),
+                Password = BCrypt.Net.BCrypt.HashPassword(user.Password), 
                 Email = user.Email,
                 IsActive = true,
                 CreateAt = DateTime.Now,
@@ -93,7 +93,7 @@ namespace API_Shopping.Services
             }).ToListAsync();
         }
 
-        public async Task<bool> UpdateUser(long id, UpdateUserDTO user)
+        public async Task<bool> UpdateUser(long id, UserUpdateDTO user)
         {
             UserDTO userTemp = await GetUserById(id);
 
