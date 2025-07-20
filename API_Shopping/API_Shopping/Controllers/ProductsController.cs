@@ -1,12 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using API_Shopping.Models;
 using API_Shopping.Interfaces;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace API_Shopping.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize(AuthenticationSchemes =JwtBearerDefaults.AuthenticationScheme)]
     [ApiController]
-    public class ProductsController : ControllerBase
+    public class ProductsController : ControllerBase 
     {
         private readonly IProductService _productService;
 
