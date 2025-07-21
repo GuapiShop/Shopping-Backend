@@ -20,17 +20,6 @@ namespace API_Shopping.Services
             _configuration = configuration;
         }
 
-        public string EncryptationSHA256(string text) {
-            SHA256 sHA256 = SHA256.Create();
-            byte[] bytes = sHA256.ComputeHash(Encoding.UTF8.GetBytes(text));
-
-            StringBuilder sb = new StringBuilder();
-            foreach (byte b in bytes) {
-                sb.Append(b);
-            }
-            return sb.ToString();
-        }
-
         public string JWTGenerator(User user) {
             var userClaims = new[]
             {
