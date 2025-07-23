@@ -23,14 +23,18 @@ namespace API_Shopping.Controllers
         [HttpPost]
         public async Task<ActionResult<Product>> AddProduct(ProductCreateDTO product)
         {
+            if(!ModelState.IsValid)
+                return BadRequest(ModelState);
+
             Product result = await _productService.AddProduct(product);
+
             if ( result != null)
             {
-                return CreatedAtAction("GetProduct", new { id = result.Id }, product);
+                return CreatedAtAction("GetProduct", new { id = result.Id }, result);
             }
             else 
             { 
-                return BadRequest();
+                return BadRequest("No se pudo crear el producto. Intente mas tarde.");
             }   
         }
 

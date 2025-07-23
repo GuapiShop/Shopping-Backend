@@ -5,17 +5,22 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API_Shopping.Services
 {
-    public class ProductService: IProductService
+    public class ProductService : IProductService
     {
         private readonly AppDbContext _context;
 
-        public ProductService( AppDbContext context) { 
+        public ProductService(AppDbContext context) {
             this._context = context;
         }
 
         //Add product
         public async Task<Product> AddProduct(ProductCreateDTO productDto)
         {
+            if (productDto == null)
+            {
+                return null;
+            }
+
             var tempProduct = new Product
             {
                 Name = productDto.Name,
@@ -27,6 +32,7 @@ namespace API_Shopping.Services
             };
             _context.Products.Add(tempProduct);
             await _context.SaveChangesAsync();
+
             return tempProduct;
         }
 
