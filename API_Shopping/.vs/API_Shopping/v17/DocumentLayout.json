@@ -1,71 +1,12 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\denni\\Documents\\Shopping Proyect\\API_Shopping\\",
-  "Documents": [
-    {
-      "AbsoluteMoniker": "D:0:0:{C6A505FB-5E20-48C6-AD1F-852170565A98}|API_Shopping\\API_Shopping.csproj|c:\\users\\denni\\documents\\shopping proyect\\api_shopping\\api_shopping\\services\\productservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{C6A505FB-5E20-48C6-AD1F-852170565A98}|API_Shopping\\API_Shopping.csproj|solutionrelative:api_shopping\\services\\productservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{C6A505FB-5E20-48C6-AD1F-852170565A98}|API_Shopping\\API_Shopping.csproj|c:\\users\\denni\\documents\\shopping proyect\\api_shopping\\api_shopping\\services\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{C6A505FB-5E20-48C6-AD1F-852170565A98}|API_Shopping\\API_Shopping.csproj|solutionrelative:api_shopping\\services\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{C6A505FB-5E20-48C6-AD1F-852170565A98}|API_Shopping\\API_Shopping.csproj|c:\\users\\denni\\documents\\shopping proyect\\api_shopping\\api_shopping\\api_shopping.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
-      "RelativeMoniker": "D:0:0:{C6A505FB-5E20-48C6-AD1F-852170565A98}|API_Shopping\\API_Shopping.csproj|solutionrelative:api_shopping\\api_shopping.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
-    }
-  ],
+  "Documents": [],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
       "VerticalTabListWidth": 256,
-      "DocumentGroups": [
-        {
-          "DockedWidth": 200,
-          "SelectedChildIndex": 0,
-          "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "ProductService.cs",
-              "DocumentMoniker": "C:\\Users\\denni\\Documents\\Shopping Proyect\\API_Shopping\\API_Shopping\\Services\\ProductService.cs",
-              "RelativeDocumentMoniker": "API_Shopping\\Services\\ProductService.cs",
-              "ToolTip": "C:\\Users\\denni\\Documents\\Shopping Proyect\\API_Shopping\\API_Shopping\\Services\\ProductService.cs",
-              "RelativeToolTip": "API_Shopping\\Services\\ProductService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAvAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-21T19:23:55.083Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "UserService.cs",
-              "DocumentMoniker": "C:\\Users\\denni\\Documents\\Shopping Proyect\\API_Shopping\\API_Shopping\\Services\\UserService.cs",
-              "RelativeDocumentMoniker": "API_Shopping\\Services\\UserService.cs",
-              "ToolTip": "C:\\Users\\denni\\Documents\\Shopping Proyect\\API_Shopping\\API_Shopping\\Services\\UserService.cs",
-              "RelativeToolTip": "API_Shopping\\Services\\UserService.cs",
-              "ViewState": "AgIAAFgAAAAAAAAAAAAwwAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-21T19:23:48.283Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "API_Shopping",
-              "DocumentMoniker": "C:\\Users\\denni\\Documents\\Shopping Proyect\\API_Shopping\\API_Shopping\\API_Shopping.csproj",
-              "RelativeDocumentMoniker": "API_Shopping\\API_Shopping.csproj",
-              "ToolTip": "C:\\Users\\denni\\Documents\\Shopping Proyect\\API_Shopping\\API_Shopping\\API_Shopping.csproj",
-              "RelativeToolTip": "API_Shopping\\API_Shopping.csproj",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2025-07-21T19:23:34.506Z",
-              "EditorCaption": ""
-            }
-          ]
-        }
-      ]
+      "DocumentGroups": []
     }
   ]
 }

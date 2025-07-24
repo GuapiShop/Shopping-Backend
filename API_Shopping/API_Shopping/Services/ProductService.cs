@@ -75,6 +75,10 @@ namespace API_Shopping.Services
         // delete product
         public async Task<bool> DeleteProduct(Product product)
         {
+            if (product==null) {
+                return false;
+            }
+
             _context.Products.Remove(product);
             try
             {
