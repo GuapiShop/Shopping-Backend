@@ -48,7 +48,6 @@ namespace API_Shopping.Controllers
         }
 
         // PUT: api/Users/number
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> PutUser(long id, UserUpdateDTO user)
@@ -72,7 +71,6 @@ namespace API_Shopping.Controllers
         }
 
         // POST: api/Users
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         [AllowAnonymous]
         public async Task<ActionResult<User>> PostUser(UserCreateDTO user)

@@ -78,5 +78,8 @@ git clone https://github.com/dennis-gomez/Shopping-Backend.git
   "Duration": "60"
 }
 
+3. Build project:
+dotnet build
+
 3. Run the project:
 dotnet run
