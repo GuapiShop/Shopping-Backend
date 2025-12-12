@@ -25,7 +25,7 @@ namespace API_Shopping.Controllers
             {
                 return NotFound("Bad credentials");
             }
-            return Ok(new { message = "User found", token = _jwtService.JWTGenerator(findUser)});
+            return Ok(new { message = "User found", token = _jwtService.JWTGenerator(findUser), role = findUser.Role});
         }
     }
 }

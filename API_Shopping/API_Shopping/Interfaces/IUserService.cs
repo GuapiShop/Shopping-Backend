@@ -4,7 +4,7 @@ namespace API_Shopping.Interfaces
 {
     public interface IUserService
     {
-        public Task<IEnumerable<UserDTO>> GetUsers();
+        public Task<object> GetUsers( int page, int pageSize );
         public Task<UserDTO> GetUserById(long id);
         public Task<User> AddUser(UserCreateDTO user);
         public Task<bool> UpdateUser(long id, UserUpdateDTO user);

@@ -22,6 +22,7 @@ namespace API_Shopping.Services
                 Email = user.Email,
                 IsActive = true,
                 CreateAt = DateTime.Now,
+                Role = "client",
             };
             _context.Users.Add(userTemp);
             await _context.SaveChangesAsync();
@@ -77,20 +78,38 @@ namespace API_Shopping.Services
                     UpdateAt = u.UpdateAt,
                     IsActive = u.IsActive,
                     Username = u.Username,
+                    Role = u.Role,
                 }).FirstOrDefaultAsync();
         }
 
-        public async Task<IEnumerable<UserDTO>> GetUsers()
+        public async Task<object> GetUsers(int page = 1, int pageSize = 10)
         {
-            return await _context.Users.Select( 
-                u => new UserDTO {
+            var query = _context.Users.AsQueryable();
+
+            var totalItems = await query.CountAsync();
+            var totalPage = (int)Math.Ceiling(totalItems / (double)pageSize);
+
+            var users = await query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .Select(u => new UserDTO 
+                {
                     Id = u.Id,
                     Email = u.Email,
                     CreateAt = u.CreateAt,
                     IsActive = u.IsActive,
                     UpdateAt = u.UpdateAt,
-                    Username = u.Username
-            }).ToListAsync();
+                    Username = u.Username, 
+                    Role = u.Role,
+                })
+                .ToListAsync();
+
+            return new
+            {
+                page,
+                totalPage, 
+                data = users
+            };
         }
 
         public async Task<bool> UpdateUser(long id, UserUpdateDTO user)
