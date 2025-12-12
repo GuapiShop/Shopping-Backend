@@ -20,15 +20,15 @@ namespace API_Shopping.Controllers
         // GET: api/Users
         [HttpGet]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+        public async Task<ActionResult> GetUsers(int page = 1, int pageSize = 10)
         {
-            var users = await _userService.GetUsers();
-            if (users == null) 
+            var data = await _userService.GetUsers(page, pageSize);
+            if (data == null) 
             { 
                 return NoContent();
             }else
             {
-                return Ok(users);
+                return Ok(data);
             }  
         }
 

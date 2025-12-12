@@ -1,4 +1,6 @@
-﻿namespace API_Shopping.Models
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace API_Shopping.Models
 {
     public class User
     {
@@ -7,6 +9,7 @@
         public string Email { get; set; }
         public string Password { get; set; }
         public bool? IsActive{ get; set; }
+        public string Role { get; set; } 
         public DateTime? CreateAt { get; set; }
         public DateTime? UpdateAt { get; set; }
     }
