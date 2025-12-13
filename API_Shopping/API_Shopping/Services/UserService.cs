@@ -31,18 +31,16 @@ namespace API_Shopping.Services
 
         public async Task<bool> DisableUser(long id)
         {
-            UserDTO userTemp = await GetUserById(id);
-            try
-            {
-                userTemp.IsActive = false;
-                userTemp.UpdateAt = DateTime.Now;
-                await _context.SaveChangesAsync();
-                return true;
-            }
-            catch (DbUpdateConcurrencyException)
-            {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+
+            if (user == null)
                 return false;
-            }
+
+            user.IsActive = false;
+            user.UpdateAt = DateTime.UtcNow;
+
+            await _context.SaveChangesAsync();
+            return true;
         }
 
         public async Task<bool> EnableUser(long id)
