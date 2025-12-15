@@ -45,18 +45,16 @@ namespace API_Shopping.Services
 
         public async Task<bool> EnableUser(long id)
         {
-            UserDTO userTemp = await GetUserById(id);
-            try
-            {
-                userTemp.IsActive = true;
-                userTemp.UpdateAt = DateTime.Now;
-                await _context.SaveChangesAsync();
-                return true;
-            }
-            catch (DbUpdateConcurrencyException)
-            {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+
+            if (user == null)
                 return false;
-            }
+
+            user.IsActive = true;
+            user.UpdateAt = DateTime.UtcNow;
+
+            await _context.SaveChangesAsync();
+            return true;
         }
 
         public async Task<bool> UserExists(long id)
@@ -110,25 +108,19 @@ namespace API_Shopping.Services
             };
         }
 
-        public async Task<bool> UpdateUser(long id, UserUpdateDTO user)
+        public async Task<bool> UpdateUser(long id, UserUpdateDTO userDto)
         {
-            UserDTO userTemp = await GetUserById(id);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
 
-            if (userTemp == null) { return false; }
-
-            try
-            {
-                userTemp.Username = user.Username;
-                userTemp.Email = user.Email;
-                userTemp.UpdateAt = DateTime.Now;
-                await _context.SaveChangesAsync();
-                return true;
-            }
-            catch (DbUpdateConcurrencyException) 
-            { 
+            if (user == null)
                 return false;
-            }
-        }
 
+            user.Username = userDto.Username;
+            user.Email = userDto.Email;
+            user.UpdateAt = DateTime.UtcNow;
+
+            await _context.SaveChangesAsync();
+            return true;
+        }
     }
 }
