@@ -18,10 +18,7 @@ namespace API_Shopping.Models
         public string Category { get; set; }
 
         [Required(ErrorMessage = "The CABYS field is required")]
-        public string CodeCABYS { get; set; }
-
-        [Range(1, 99999, ErrorMessage = "The quantity field must be between 1 and 99999")]
-        public int Quantity { get; set; }
+        public string CodeCabys { get; set; }
 
         [Range(0.01, 99999, ErrorMessage = "The price field must be between 0.01 and 99999")]
         public decimal Price { get; set; }

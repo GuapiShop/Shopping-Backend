@@ -20,6 +20,7 @@ namespace API_Shopping.Controllers
 
         // POST: api/Products
         [HttpPost]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<Product>> AddProduct(ProductCreateDTO product)
         {
             if(!ModelState.IsValid)
@@ -39,21 +40,23 @@ namespace API_Shopping.Controllers
 
         // GET: api/Products
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<ActionResult> GetProducts(int page = 1, int pageSize = 10)
         {
-            var products = await _productService.GetProducts();
+            var data = await _productService.GetProducts(page, pageSize);
 
-            if (products == null) {
-                return NoContent(); //204
+            if (data == null) {
+                return NoContent();
             } 
             else
             {
-                return Ok(products);
+                return Ok(data);
             }
         }
 
         // GET: api/Products/number
         [HttpGet("{id}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<Product>> GetProduct(long id)
         {
             var product = await _productService.GetProductById(id);
@@ -68,6 +71,7 @@ namespace API_Shopping.Controllers
 
         // PUT: api/Products/5
         [HttpPut("{id}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> PutProduct(long id, Product product)
         {
             if (id != product.Id)
@@ -86,23 +90,40 @@ namespace API_Shopping.Controllers
             return StatusCode(500);
         }
 
-        // DELETE: api/Products/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteProduct(long id)
+        // PUT: api/Products/disable/5
+        [HttpPut("disable/{id}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<IActionResult> DisableProduct(long id)
         {
-            var product = await _productService.GetProductById(id);
-
-            if (product == null)
+            if (!await _productService.ProductExists(id))
             {
-                return NotFound();
+                return NotFound("Product not found");
             }
 
-            if (await _productService.DeleteProduct(product))
+            if (await _productService.DisableProduct(id))
             {
                 return NoContent();
             }
 
             return StatusCode(500);
-        } 
+        }
+
+        // PUT: api/Products/enable/5
+        [HttpPut("enable/{id}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<IActionResult> EnableProduct(long id)
+        {
+            if (!await _productService.ProductExists(id))
+            {
+                return NotFound("Product not found");
+            }
+
+            if (await _productService.EnableProduct(id))
+            {
+                return NoContent();
+            }
+
+            return StatusCode(500);
+        }
     }
 }
