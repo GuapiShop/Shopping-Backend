@@ -8,8 +8,9 @@ obj/
 *.userosscache
 *.sln.docstates
 
-## Visual Studio Code
+## Visual
 .vscode/
+.vs/
 
 ## ASP.NET Core secrets
 secrets.json

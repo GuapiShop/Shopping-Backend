@@ -1,22 +1,18 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\denni\\Desktop\\Personal Code\\Shopping-Backend\\API_Shopping\\",
+  "WorkspaceRootPath": "C:\\Users\\denni\\Desktop\\Personal_Code\\Shopping\\Shopping-Backend\\API_Shopping\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{C6A505FB-5E20-48C6-AD1F-852170565A98}|API_Shopping\\API_Shopping.csproj|c:\\users\\denni\\desktop\\personal code\\shopping-backend\\api_shopping\\api_shopping\\controllers\\productscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{C6A505FB-5E20-48C6-AD1F-852170565A98}|API_Shopping\\API_Shopping.csproj|solutionrelative:api_shopping\\controllers\\productscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{C6A505FB-5E20-48C6-AD1F-852170565A98}|API_Shopping\\API_Shopping.csproj|c:\\users\\denni\\desktop\\personal code\\shopping-backend\\api_shopping\\api_shopping\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{C6A505FB-5E20-48C6-AD1F-852170565A98}|API_Shopping\\API_Shopping.csproj|solutionrelative:api_shopping\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{C6A505FB-5E20-48C6-AD1F-852170565A98}|API_Shopping\\API_Shopping.csproj|c:\\users\\denni\\desktop\\personal code\\shopping-backend\\api_shopping\\api_shopping\\services\\productservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{C6A505FB-5E20-48C6-AD1F-852170565A98}|API_Shopping\\API_Shopping.csproj|c:\\users\\denni\\desktop\\personal_code\\shopping\\shopping-backend\\api_shopping\\api_shopping\\services\\productservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{C6A505FB-5E20-48C6-AD1F-852170565A98}|API_Shopping\\API_Shopping.csproj|solutionrelative:api_shopping\\services\\productservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{C6A505FB-5E20-48C6-AD1F-852170565A98}|API_Shopping\\API_Shopping.csproj|c:\\users\\denni\\desktop\\personal code\\shopping-backend\\api_shopping\\api_shopping\\services\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{C6A505FB-5E20-48C6-AD1F-852170565A98}|API_Shopping\\API_Shopping.csproj|solutionrelative:api_shopping\\services\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{C6A505FB-5E20-48C6-AD1F-852170565A98}|API_Shopping\\API_Shopping.csproj|c:\\users\\denni\\desktop\\personal_code\\shopping\\shopping-backend\\api_shopping\\api_shopping\\controllers\\productscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C6A505FB-5E20-48C6-AD1F-852170565A98}|API_Shopping\\API_Shopping.csproj|solutionrelative:api_shopping\\controllers\\productscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C6A505FB-5E20-48C6-AD1F-852170565A98}|API_Shopping\\API_Shopping.csproj|c:\\users\\denni\\desktop\\personal_code\\shopping\\shopping-backend\\api_shopping\\api_shopping\\models\\productupdatedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C6A505FB-5E20-48C6-AD1F-852170565A98}|API_Shopping\\API_Shopping.csproj|solutionrelative:api_shopping\\models\\productupdatedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -26,55 +22,45 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "UserService.cs",
-              "DocumentMoniker": "C:\\Users\\denni\\Desktop\\Personal Code\\Shopping-Backend\\API_Shopping\\API_Shopping\\Services\\UserService.cs",
-              "RelativeDocumentMoniker": "API_Shopping\\Services\\UserService.cs",
-              "ToolTip": "C:\\Users\\denni\\Desktop\\Personal Code\\Shopping-Backend\\API_Shopping\\API_Shopping\\Services\\UserService.cs",
-              "RelativeToolTip": "API_Shopping\\Services\\UserService.cs",
-              "ViewState": "AgIAAEoAAAAAAAAAAAAswFIAAAAbAAAAAAAAAA==",
+              "DocumentIndex": 2,
+              "Title": "ProductUpdateDTO.cs",
+              "DocumentMoniker": "C:\\Users\\denni\\Desktop\\Personal_Code\\Shopping\\Shopping-Backend\\API_Shopping\\API_Shopping\\Models\\ProductUpdateDTO.cs",
+              "RelativeDocumentMoniker": "API_Shopping\\Models\\ProductUpdateDTO.cs",
+              "ToolTip": "C:\\Users\\denni\\Desktop\\Personal_Code\\Shopping\\Shopping-Backend\\API_Shopping\\API_Shopping\\Models\\ProductUpdateDTO.cs",
+              "RelativeToolTip": "API_Shopping\\Models\\ProductUpdateDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAkAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-27T19:36:32.043Z"
+              "WhenOpened": "2026-01-20T13:17:22.614Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "UsersController.cs",
-              "DocumentMoniker": "C:\\Users\\denni\\Desktop\\Personal Code\\Shopping-Backend\\API_Shopping\\API_Shopping\\Controllers\\UsersController.cs",
-              "RelativeDocumentMoniker": "API_Shopping\\Controllers\\UsersController.cs",
-              "ToolTip": "C:\\Users\\denni\\Desktop\\Personal Code\\Shopping-Backend\\API_Shopping\\API_Shopping\\Controllers\\UsersController.cs",
-              "RelativeToolTip": "API_Shopping\\Controllers\\UsersController.cs",
-              "ViewState": "AgIAAAkAAAAAAAAAAAAAABYAAAAfAAAAAAAAAA==",
+              "Title": "ProductsController.cs",
+              "DocumentMoniker": "C:\\Users\\denni\\Desktop\\Personal_Code\\Shopping\\Shopping-Backend\\API_Shopping\\API_Shopping\\Controllers\\ProductsController.cs",
+              "RelativeDocumentMoniker": "API_Shopping\\Controllers\\ProductsController.cs",
+              "ToolTip": "C:\\Users\\denni\\Desktop\\Personal_Code\\Shopping\\Shopping-Backend\\API_Shopping\\API_Shopping\\Controllers\\ProductsController.cs",
+              "RelativeToolTip": "API_Shopping\\Controllers\\ProductsController.cs",
+              "ViewState": "AgIAAEMAAAAAAAAAAAAkwFAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-27T19:36:27.997Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "ProductService.cs",
-              "DocumentMoniker": "C:\\Users\\denni\\Desktop\\Personal Code\\Shopping-Backend\\API_Shopping\\API_Shopping\\Services\\ProductService.cs",
-              "RelativeDocumentMoniker": "API_Shopping\\Services\\ProductService.cs",
-              "ToolTip": "C:\\Users\\denni\\Desktop\\Personal Code\\Shopping-Backend\\API_Shopping\\API_Shopping\\Services\\ProductService.cs",
-              "RelativeToolTip": "API_Shopping\\Services\\ProductService.cs",
-              "ViewState": "AgIAACQAAAAAAAAAAAAowDQAAAAbAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-27T19:23:56.09Z"
+              "WhenOpened": "2025-12-27T19:23:50.452Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "ProductsController.cs",
-              "DocumentMoniker": "C:\\Users\\denni\\Desktop\\Personal Code\\Shopping-Backend\\API_Shopping\\API_Shopping\\Controllers\\ProductsController.cs",
-              "RelativeDocumentMoniker": "API_Shopping\\Controllers\\ProductsController.cs",
-              "ToolTip": "C:\\Users\\denni\\Desktop\\Personal Code\\Shopping-Backend\\API_Shopping\\API_Shopping\\Controllers\\ProductsController.cs",
-              "RelativeToolTip": "API_Shopping\\Controllers\\ProductsController.cs",
-              "ViewState": "AgIAAFcAAAAAAAAAAAAowGEAAAA5AAAAAAAAAA==",
+              "Title": "ProductService.cs",
+              "DocumentMoniker": "C:\\Users\\denni\\Desktop\\Personal_Code\\Shopping\\Shopping-Backend\\API_Shopping\\API_Shopping\\Services\\ProductService.cs",
+              "RelativeDocumentMoniker": "API_Shopping\\Services\\ProductService.cs",
+              "ToolTip": "C:\\Users\\denni\\Desktop\\Personal_Code\\Shopping\\Shopping-Backend\\API_Shopping\\API_Shopping\\Services\\ProductService.cs",
+              "RelativeToolTip": "API_Shopping\\Services\\ProductService.cs",
+              "ViewState": "AgIAAE8AAAAAAAAAAAAkwFcAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-27T19:23:50.452Z",
+              "WhenOpened": "2025-12-27T19:23:56.09Z",
               "EditorCaption": ""
             }
           ]

@@ -28,9 +28,12 @@ namespace API_Shopping.Services
                 Category = productDto.Category,
                 CodeCabys = productDto.CodeCabys,
                 Price = productDto.Price,
+                TaxCabys = productDto.TaxCabys,
+                DescriptionCabys = productDto.DescriptionCabys,
                 IsActive = true,
                 CreateAt = DateTime.UtcNow
             };
+
             _context.Products.Add(tempProduct);
             await _context.SaveChangesAsync();
 
@@ -76,7 +79,7 @@ namespace API_Shopping.Services
         }
         
         //Update product
-        public async Task<bool> UpdateProduct(long id, Product product)
+        public async Task<bool> UpdateProduct(long id, ProductUpdateDTO product)
         {
             Product productFind = await GetProductById(id);
             try
@@ -86,9 +89,10 @@ namespace API_Shopping.Services
                 productFind.Name = product.Name;
                 productFind.Description = product.Description;
                 productFind.Category = product.Category;
-                productFind.CodeCabys = product.CodeCabys;
                 productFind.Price = product.Price;
-                productFind.IsActive = product.IsActive;
+                productFind.TaxCabys = product.TaxCabys;
+                productFind.CodeCabys = product.CodeCabys;
+                productFind.DescriptionCabys = product.DescriptionCabys;
                 productFind.UpdateAt = DateTime.UtcNow;
 
                 await _context.SaveChangesAsync();

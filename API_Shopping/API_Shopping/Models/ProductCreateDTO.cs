@@ -20,7 +20,14 @@ namespace API_Shopping.Models
         [Required(ErrorMessage = "The CABYS field is required")]
         public string CodeCabys { get; set; }
 
+        [Required(ErrorMessage = "The description of cabys field is required.")]
+        [StringLength(500, ErrorMessage = "The description of cabys must not exceed 500 characters.")]
+        public string DescriptionCabys { get; set; }
+
         [Range(0.01, 99999, ErrorMessage = "The price field must be between 0.01 and 99999")]
         public decimal Price { get; set; }
+
+        [Range(0.01, 99999, ErrorMessage = "The tax of cabys field must be between 0.01 and 99999")]
+        public decimal TaxCabys { get; set; }
     }
 }
