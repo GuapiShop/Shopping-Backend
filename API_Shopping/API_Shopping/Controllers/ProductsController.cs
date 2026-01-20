@@ -72,7 +72,7 @@ namespace API_Shopping.Controllers
         // PUT: api/Products/5
         [HttpPut("{id}")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<IActionResult> PutProduct(long id, Product product)
+        public async Task<IActionResult> PutProduct(long id, ProductUpdateDTO product)
         {
             if (id != product.Id)
             {
