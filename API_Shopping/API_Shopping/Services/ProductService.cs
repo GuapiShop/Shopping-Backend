@@ -58,6 +58,8 @@ namespace API_Shopping.Services
                     Category = u.Category,
                     CodeCabys = u.CodeCabys,
                     Price = u.Price,
+                    TaxCabys = u.TaxCabys,
+                    DescriptionCabys = u.DescriptionCabys,
                     IsActive = u.IsActive,
                     CreateAt = u.CreateAt,
                     UpdateAt = u.UpdateAt,
