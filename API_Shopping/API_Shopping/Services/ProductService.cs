@@ -81,7 +81,7 @@ namespace API_Shopping.Services
 
             if (!string.IsNullOrEmpty(category))
             {
-                query = query.Where(p => p.Category == category);
+                query = query.Where(p => p.Category == category && p.IsActive==true);
             }
 
             var totalItems = await query.CountAsync();
