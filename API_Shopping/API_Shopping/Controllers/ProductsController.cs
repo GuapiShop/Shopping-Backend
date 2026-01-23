@@ -54,6 +54,22 @@ namespace API_Shopping.Controllers
             }
         }
 
+        // GET: api/Products/show
+        [HttpGet("show")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<ActionResult<ProductShowDTO>> GetShowProducts(int page = 1, int pageSize = 10, string category="") 
+        {
+            var data = await _productService.GetShowProducts(page, pageSize, category);
+            if (data == null)
+            {
+                return NoContent();
+            }
+            else
+            {
+                return Ok(data);
+            }
+        }
+
         // GET: api/Products/number
         [HttpGet("{id}")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
