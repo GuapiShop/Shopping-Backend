@@ -74,6 +74,39 @@ namespace API_Shopping.Services
             };
         }
 
+        //List products to show to client
+        public async Task<object> GetShowProducts(int page=1, int pageSize=10, string category="")
+        {
+            var query = _context.Products.AsQueryable();
+
+            if (!string.IsNullOrEmpty(category))
+            {
+                query = query.Where(p => p.Category == category);
+            }
+
+            var totalItems = await query.CountAsync();
+            var totalPage = (int)Math.Ceiling(totalItems / (double)pageSize);
+
+            var products = await query
+                .Skip((page-1) * pageSize)
+                .Take(pageSize)
+                .Select(u => new ProductShowDTO
+                {
+                    Id = u.Id,
+                    Name = u.Name,
+                    Description = u.Description,
+                    Category = u.Category,
+                    Price = u.Price,
+                })
+                .ToListAsync();
+            return new
+            {
+                page,
+                totalPage,
+                data = products,
+            };
+        }
+
         //Get a single product
         public async Task<Product> GetProductById(long id)
         {
