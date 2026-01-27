@@ -1,7 +1,6 @@
 ﻿using API_Shopping.Context;
 using API_Shopping.Interfaces;
 using API_Shopping.Models;
-using NuGet.Versioning;
 
 namespace API_Shopping.Services
 {
