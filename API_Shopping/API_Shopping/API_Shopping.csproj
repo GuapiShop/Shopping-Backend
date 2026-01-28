@@ -23,7 +23,6 @@
   <ItemGroup>
     <Folder Include="DTOs\Auth\" />
     <Folder Include="DTOs\Detail\" />
-    <Folder Include="DTOs\User\" />
   </ItemGroup>
 
 </Project>

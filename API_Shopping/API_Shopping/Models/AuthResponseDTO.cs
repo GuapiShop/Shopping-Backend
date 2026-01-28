@@ -1,4 +1,6 @@
-﻿namespace API_Shopping.Models
+﻿using API_Shopping.DTOs.User;
+
+namespace API_Shopping.Models
 {
     public class AuthResponseDTO
     {
