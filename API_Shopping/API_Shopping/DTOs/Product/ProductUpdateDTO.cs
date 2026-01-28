@@ -1,4 +1,4 @@
-﻿namespace API_Shopping.Models
+﻿namespace API_Shopping.DTOs.Product
 {
     public class ProductUpdateDTO
     {

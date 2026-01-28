@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace API_Shopping.Models
+namespace API_Shopping.DTOs.Product
 {
     public class ProductCreateDTO
     {

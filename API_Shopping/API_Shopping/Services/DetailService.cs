@@ -35,7 +35,7 @@ namespace API_Shopping.Services
 
                 var detail = new Detail
                 {
-                    ProductId = product.Id.Value, //not value
+                    ProductId = product.Id, //not value
                     OrderId = order.Id.Value, //not value
                     Price = product.Price,
                     Quantity = item.Quantity,
