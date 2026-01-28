@@ -1,4 +1,5 @@
-﻿using API_Shopping.Models;
+﻿using API_Shopping.DTOs.Detail;
+using API_Shopping.Models;
 
 namespace API_Shopping.Interfaces
 {
