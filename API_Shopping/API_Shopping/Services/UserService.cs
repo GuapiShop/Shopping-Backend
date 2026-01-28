@@ -1,4 +1,5 @@
 ﻿using API_Shopping.Context;
+using API_Shopping.DTOs.User;
 using API_Shopping.Interfaces;
 using API_Shopping.Models;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +14,7 @@ namespace API_Shopping.Services
             _context = context;
         }
 
+        // Add a user
         public async Task<User> AddUser(UserCreateDTO user)
         {
             var userTemp = new User
@@ -29,6 +31,7 @@ namespace API_Shopping.Services
             return userTemp;
         }
 
+        // Disable user
         public async Task<bool> DisableUser(long id)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
@@ -43,6 +46,7 @@ namespace API_Shopping.Services
             return true;
         }
 
+        // Enable user
         public async Task<bool> EnableUser(long id)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
@@ -57,11 +61,13 @@ namespace API_Shopping.Services
             return true;
         }
 
+        // Verify existence
         public async Task<bool> UserExists(long id)
         {
             return await _context.Users.AnyAsync(e => e.Id == id);
         }
 
+        // Get user by id
         public async Task<UserDTO> GetUserById(long id)
         {
             return await _context.Users
@@ -78,6 +84,7 @@ namespace API_Shopping.Services
                 }).FirstOrDefaultAsync();
         }
 
+        // Get list of user paged
         public async Task<object> GetUsers(int page = 1, int pageSize = 10)
         {
             var query = _context.Users.AsQueryable();
@@ -108,6 +115,7 @@ namespace API_Shopping.Services
             };
         }
 
+        // Update user
         public async Task<bool> UpdateUser(long id, UserUpdateDTO userDto)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
