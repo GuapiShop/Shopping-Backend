@@ -1,8 +1,8 @@
-﻿namespace API_Shopping.Models
+﻿namespace API_Shopping.DTOs.Product
 {
-    public class ProductShowDTO 
+    public class ProductResponseDTO 
     {
-        public long ?Id { get; set; }
+        public long Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public string Category { get; set; }

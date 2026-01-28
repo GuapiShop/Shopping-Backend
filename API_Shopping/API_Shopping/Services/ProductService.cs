@@ -1,4 +1,5 @@
 ﻿using API_Shopping.Context;
+using API_Shopping.DTOs.Product;
 using API_Shopping.Interfaces;
 using API_Shopping.Models;
 using Microsoft.EntityFrameworkCore;
@@ -75,7 +76,7 @@ namespace API_Shopping.Services
         }
 
         //List products to show to client
-        public async Task<object> GetShowProducts(int page=1, int pageSize=10, string category="")
+        public async Task<object> GetCatalogProducts(int page=1, int pageSize=10, string category="")
         {
             var query = _context.Products.AsQueryable();
 
@@ -90,13 +91,13 @@ namespace API_Shopping.Services
             var products = await query
                 .Skip((page-1) * pageSize)
                 .Take(pageSize)
-                .Select(u => new ProductShowDTO
+                .Select(u => new ProductResponseDTO
                 {
                     Id = u.Id,
                     Name = u.Name,
                     Description = u.Description,
                     Category = u.Category,
-                    Price = u.Price,
+                    Price = u.Price + (u.Price * u.TaxCabys),
                 })
                 .ToListAsync();
             return new

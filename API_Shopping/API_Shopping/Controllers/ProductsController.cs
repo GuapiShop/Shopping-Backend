@@ -3,10 +3,11 @@ using API_Shopping.Models;
 using API_Shopping.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using API_Shopping.DTOs.Product;
 
 namespace API_Shopping.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/product")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [ApiController]
     public class ProductsController : ControllerBase 
@@ -18,9 +19,12 @@ namespace API_Shopping.Controllers
             _productService = productService;
         }
 
-        // POST: api/Products
+        // POST: api/products
         [HttpPost]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize(
+            AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,
+            Roles = "admin"
+        )]
         public async Task<ActionResult<Product>> AddProduct(ProductCreateDTO product)
         {
             if(!ModelState.IsValid)
@@ -34,13 +38,16 @@ namespace API_Shopping.Controllers
             }
             else 
             { 
-                return BadRequest("No se pudo crear el producto. Intente mas tarde.");
+                return BadRequest("The product could not be created. Please try again later.");
             }   
         }
 
-        // GET: api/Products
+        // GET: api/products
         [HttpGet]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize(
+            AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,
+            Roles = "admin"
+        )]
         public async Task<ActionResult> GetProducts(int page = 1, int pageSize = 10)
         {
             var data = await _productService.GetProducts(page, pageSize);
@@ -54,12 +61,15 @@ namespace API_Shopping.Controllers
             }
         }
 
-        // GET: api/Products/show
-        [HttpGet("show")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<ActionResult<ProductShowDTO>> GetShowProducts(int page = 1, int pageSize = 10, string category="") 
+        // GET: api/products/catalog
+        [HttpGet("catalog")]
+        [Authorize(
+            AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,
+            Roles = "client"
+        )]
+        public async Task<ActionResult<ProductResponseDTO>> GetShowProducts(int page = 1, int pageSize = 10, string category="") 
         {
-            var data = await _productService.GetShowProducts(page, pageSize, category);
+            var data = await _productService.GetCatalogProducts(page, pageSize, category);
             if (data == null)
             {
                 return NoContent();
@@ -70,9 +80,12 @@ namespace API_Shopping.Controllers
             }
         }
 
-        // GET: api/Products/number
+        // GET: api/products/number
         [HttpGet("{id}")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize(
+            AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, 
+            Roles = "admin,client"
+        )]
         public async Task<ActionResult<Product>> GetProduct(long id)
         {
             var product = await _productService.GetProductById(id);
@@ -85,9 +98,12 @@ namespace API_Shopping.Controllers
             return Ok(product);
         }
 
-        // PUT: api/Products/5
+        // PUT: api/products/5
         [HttpPut("{id}")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize(
+            AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,
+            Roles = "admin"
+        )]
         public async Task<IActionResult> PutProduct(long id, ProductUpdateDTO product)
         {
             if (id != product.Id)
@@ -106,9 +122,12 @@ namespace API_Shopping.Controllers
             return StatusCode(500);
         }
 
-        // PUT: api/Products/disable/5
+        // PUT: api/products/disable/5
         [HttpPut("disable/{id}")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize(
+            AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,
+            Roles = "admin"
+        )]
         public async Task<IActionResult> DisableProduct(long id)
         {
             if (!await _productService.ProductExists(id))
@@ -124,9 +143,12 @@ namespace API_Shopping.Controllers
             return StatusCode(500);
         }
 
-        // PUT: api/Products/enable/5
+        // PUT: api/products/enable/5
         [HttpPut("enable/{id}")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize(
+            AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,
+            Roles = "admin"
+        )]
         public async Task<IActionResult> EnableProduct(long id)
         {
             if (!await _productService.ProductExists(id))
