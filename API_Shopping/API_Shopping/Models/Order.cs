@@ -2,7 +2,7 @@
 {
     public class Order
     {
-        public long? Id { get; set; }
+        public long Id { get; set; }
         public string State { get; set; }
         public DateTime? CreateAt { get; set; }
 

@@ -1,6 +1,7 @@
 using API_Shopping.Context;
 using API_Shopping.Interfaces;
 using API_Shopping.Services;
+using API_Shopping.Middleware;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -70,6 +71,8 @@ app.UseAuthentication(); //
 app.UseCors("NewPolicy");
 
 app.UseAuthorization();
+
+app.UseMiddleware<ExceptionMiddleware>();
 
 app.MapControllers();
 

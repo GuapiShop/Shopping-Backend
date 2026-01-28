@@ -1,6 +1,6 @@
-﻿using API_Shopping.Interfaces;
+﻿using API_Shopping.DTOs.Detail;
+using API_Shopping.Interfaces;
 using API_Shopping.Models;
-using API_Shopping.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -8,7 +8,7 @@ using System.Security.Claims;
 
 namespace API_Shopping.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/details")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [ApiController]
     public class DetailController : ControllerBase
@@ -21,7 +21,10 @@ namespace API_Shopping.Controllers
 
         //POST: api/Detail
         [HttpPost]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize(
+            AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,
+            Roles = "client"
+        )]
         public async Task<ActionResult<Product>> AddDetail(DetailCreateDTO[] detailDto)
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -33,15 +36,13 @@ namespace API_Shopping.Controllers
 
             long userId = long.Parse(userIdClaim);
 
-            Order result = await _detailService.AddDetails(userId, detailDto);
-            if (result != null)
-            {
-                return NoContent();
-            }
-            else
-            {
-                return BadRequest("The detail could not be created");
-            }
+            var result = await _detailService.AddDetails(userId, detailDto);
+
+            return CreatedAtAction(
+                nameof(AddDetail),
+                new { orderId = result.Id },
+                result
+            );
         }
     }
 }

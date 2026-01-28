@@ -10,6 +10,7 @@
         public string CodeCabys { get; set; }
         public string DescriptionCabys { get; set; }
         public decimal TaxCabys { get; set; }
+        public int Quantity { get; set; }
         public bool IsActive { get; set; }
         public DateTime? CreateAt { get; set; }
         public DateTime? UpdateAt { get; set; }
