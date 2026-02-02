@@ -61,6 +61,7 @@ namespace API_Shopping.Services
                     Price = u.Price,
                     TaxCabys = u.TaxCabys,
                     DescriptionCabys = u.DescriptionCabys,
+                    Quantity = u.Quantity,
                     IsActive = u.IsActive,
                     CreateAt = u.CreateAt,
                     UpdateAt = u.UpdateAt,
@@ -98,6 +99,7 @@ namespace API_Shopping.Services
                     Description = u.Description,
                     Category = u.Category,
                     Price = u.Price + (u.Price * u.TaxCabys),
+                    Quantity = u.Quantity,
                 })
                 .ToListAsync();
             return new
