@@ -19,7 +19,12 @@ namespace API_Shopping.Services
         {
             using var transaction = await _context.Database.BeginTransactionAsync();
 
-            var user = _context.Users.FindAsync(userId);
+            var user = await _context.Users.FindAsync(userId);
+
+            if (user == null)
+            {
+                throw new Exception("User not found");
+            }
 
             var order = new Order
             {
@@ -30,7 +35,7 @@ namespace API_Shopping.Services
 
             _context.Orders.Add(order);
             await _context.SaveChangesAsync();
-
+            
             foreach (var item in detailsDto) 
             {
                 var product = await _context.Products.FindAsync(item.ProductId);

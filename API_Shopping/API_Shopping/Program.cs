@@ -10,10 +10,10 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection"); //
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<AppDbContext>(options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))); //
 
-builder.Services.AddScoped<JwtService>(); //
+builder.Services.AddScoped<JwtService>();
 builder.Services.AddAuthentication(config => // jwt configurations
 {
     config.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme; // Barrer
@@ -37,9 +37,10 @@ builder.Services.AddAuthentication(config => // jwt configurations
     };
 });
 
-builder.Services.AddControllers(); //
-builder.Services.AddScoped<IProductService, ProductService>(); //
-builder.Services.AddScoped<IUserService, UserService>(); //
+builder.Services.AddControllers(); 
+builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IDetailService, DetailService>(); 
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -61,12 +62,11 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-
 }
 
 app.UseHttpsRedirection();
 
-app.UseAuthentication(); //
+app.UseAuthentication();
 
 app.UseCors("NewPolicy");
 
