@@ -25,7 +25,7 @@ namespace API_Shopping.Controllers
             AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,
             Roles = "client"
         )]
-        public async Task<ActionResult<Product>> AddDetail(DetailCreateDTO[] detailDto)
+        public async Task<ActionResult<Order>> AddDetail(DetailCreateDTO[] detailDto)
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
@@ -38,11 +38,7 @@ namespace API_Shopping.Controllers
 
             var result = await _detailService.AddDetails(userId, detailDto);
 
-            return CreatedAtAction(
-                nameof(AddDetail),
-                new { orderId = result.Id },
-                result
-            );
+            return Ok(result);
         }
     }
 }
