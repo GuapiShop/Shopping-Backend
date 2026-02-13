@@ -78,5 +78,20 @@ namespace API_Shopping.Services
 
             return await GetOrCreateShoppingCart(userId);
         }
+
+        public async Task<bool> DeleteProductItemFromCart(long itemId, long userId)
+        {
+            var item = await _context.ItemShoppingCarts
+                .Include(i=>i.ShoppingCart)
+                .FirstOrDefaultAsync(i => i.Id == itemId && i.ShoppingCart.UserId == userId);
+
+            if (item == null)
+                return false;
+
+            _context.ItemShoppingCarts.Remove(item);
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
     }
 }
