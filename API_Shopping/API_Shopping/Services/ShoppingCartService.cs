@@ -93,5 +93,34 @@ namespace API_Shopping.Services
 
             return true;
         }
+
+        public async Task<bool> UpdateProductItemFromCart(long itemId, int quantity, long userId)
+        {
+            if (quantity < 0)
+                throw new ArgumentException("Quantity cannot be negative");
+
+            var item = await _context.ItemShoppingCarts
+                .Include(i => i.ShoppingCart)
+                .Include(i => i.Product)
+                .FirstOrDefaultAsync(i => i.Id == itemId && i.ShoppingCart.UserId == userId);
+
+            if (item == null)
+                return false;
+
+            if (quantity <= 0)
+            {
+                _context.ItemShoppingCarts.Remove(item);
+            }
+            else
+            {
+                if (quantity > item.Product.Quantity)
+                    throw new Exception("Not enough stock");
+
+                item.Quantity = quantity;
+            }
+
+            await _context.SaveChangesAsync();
+            return true;
+        }
     }
 }
