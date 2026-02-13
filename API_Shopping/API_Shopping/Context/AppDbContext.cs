@@ -16,5 +16,9 @@ namespace API_Shopping.Context
         public DbSet<Detail> Details { get; set; }
 
         public DbSet<Payment> Payments { get; set; }
+
+        public DbSet<ShoppingCart> ShoppingCarts { get; set; }
+
+        public DbSet<ItemShoppingCart> ItemShoppingCarts { get; set; }
     }
 }
