@@ -103,5 +103,29 @@ namespace API_Shopping.Controllers
 
             return NoContent();
         }
+
+        [HttpDelete]
+        [Authorize(
+            AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,
+            Roles = "client"
+        )]
+        public async Task<IActionResult> DeleteItemCart(long id)
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (userIdClaim == null)
+            {
+                return Unauthorized();
+            }
+
+            long userId = long.Parse(userIdClaim);
+
+            if (await _shoppingCartService.DeleteProductItemFromCart(id, userId))
+            {
+                return NoContent();
+            }
+
+            return StatusCode(500);
+        }
     }
 }
