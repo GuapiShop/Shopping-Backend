@@ -1,5 +1,6 @@
 ﻿using API_Shopping.Context;
 using API_Shopping.DTOs.ShoppingCart;
+using API_Shopping.Enums;
 using API_Shopping.Interfaces;
 using API_Shopping.Models;
 using Microsoft.EntityFrameworkCore;
@@ -21,27 +22,27 @@ namespace API_Shopping.Services
 
         public async Task<ShoppingCart> GetOrCreateShoppingCart(long userId)
         {
-           ShoppingCart shoppingCart = null;
+            if (userId <= 0) {
+                throw new ArgumentException("Invalid user id");
+            }
 
-           if (userId <= 0) {
-                throw new NotImplementedException();
-           }
+            var existingCart = await _context.ShoppingCarts
+                .Include(c => c.ItemShoppingCarts)
+                .FirstOrDefaultAsync(i => i.UserId == userId && i.Status == ShoppingCartStatus.Pending);
 
-            var existingCart = await _context.ShoppingCarts.FirstOrDefaultAsync(i => i.UserId == userId && i.Status == "PENDING");
-
-            if (existingCart != null) { 
+            if (existingCart != null) {
                 return existingCart;
             }
 
             var newCart = new ShoppingCart {
-               Status = "PENDING",
+               Status = ShoppingCartStatus.Pending,
                UserId = userId,
-               CreateAt = DateTime.Now,
+               CreatedAt = DateTime.UtcNow,
             };
 
             _context.ShoppingCarts.Add(newCart);
             await _context.SaveChangesAsync();
-
+            
             return newCart;
         }
     }
