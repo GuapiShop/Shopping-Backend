@@ -4,7 +4,7 @@
     {
         public int Quantity { get; set; }
         public int UnitPrice { get; set; }
-        public long productId { get; set; }
-        public long shoppingCartId { get; set; }
+        public long ProductId { get; set; }
+        public long ShoppingCartId { get; set; }
     }
 }
