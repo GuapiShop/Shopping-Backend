@@ -1,4 +1,5 @@
 ﻿using API_Shopping.DTOs.Product;
+using API_Shopping.DTOs.ShoppingCart;
 using API_Shopping.Interfaces;
 using API_Shopping.Models;
 using API_Shopping.Services;
@@ -38,7 +39,69 @@ namespace API_Shopping.Controllers
 
             var data = await _shoppingCartService.GetOrCreateShoppingCart(userId);
 
-            return Ok(data); 
+            return Ok(data);
+        }
+
+        [HttpPost]
+        [Authorize(
+            AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,
+            Roles = "client"
+        )]
+        public async Task<ActionResult<ShoppingCart>> AddItemIntoCart(ItemShoppingCartCreateDTO item)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (userIdClaim == null)
+            {
+                return Unauthorized();
+            }
+
+            long userId = long.Parse(userIdClaim);
+
+            var result = await _shoppingCartService.AddProductIntoCart(item, userId);
+
+            return CreatedAtAction(
+                nameof(GetShoppingCart),
+                new { userId = userId },
+                result
+            );
+        }
+
+        [HttpPut("{id}")]
+        [Authorize(
+            AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,
+            Roles = "client"
+        )]
+        public async Task<IActionResult> PutItemQuantity(long id, ItemShoppingCartUpdateDTO itemDto)
+        {
+            if (id != itemDto.Id)
+                return BadRequest("Id mismatch");
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (userIdClaim == null)
+            {
+                return Unauthorized();
+            }
+
+            long userId = long.Parse(userIdClaim);
+            bool isUpdated = await _shoppingCartService.UpdateProductItemFromCart(itemDto.Id, itemDto.Quantity, userId);
+
+            if (isUpdated)
+            {
+                return NoContent();
+            }
+
+            if (!isUpdated)
+                return NotFound();
+
+            return NoContent();
         }
     }
 }
