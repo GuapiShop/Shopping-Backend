@@ -68,6 +68,7 @@ namespace API_Shopping.Services
                 {
                     productId = itemDto.ProductId,
                     UnitPrice = itemDto.UnitPrice,
+                    Quantity = itemDto.Quantity,
                     shoppingCartId = cart.Id,
                 };
 
