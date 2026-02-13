@@ -8,5 +8,6 @@ namespace API_Shopping.Interfaces
     {
         public Task<ShoppingCart> GetOrCreateShoppingCart(long userId);
         public Task<ShoppingCart> AddProductIntoCart(ItemShoppingCartCreateDTO item, long userId);
+        public Task<bool> DeleteProductItemFromCart(long itemId);
     }
 }
