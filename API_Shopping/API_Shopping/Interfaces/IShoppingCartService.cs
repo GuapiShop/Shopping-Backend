@@ -7,6 +7,6 @@ namespace API_Shopping.Interfaces
     public interface IShoppingCartService
     {
         public Task<ShoppingCart> GetOrCreateShoppingCart(long userId);
-        public Task<ItemShoppingCart> AddProductIntoCart(ItemShoppingCartCreateDTO[] items);
+        public Task<ShoppingCart> AddProductIntoCart(ItemShoppingCartCreateDTO item, long userId);
     }
 }
