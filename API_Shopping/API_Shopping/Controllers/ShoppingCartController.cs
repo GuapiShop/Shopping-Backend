@@ -69,5 +69,39 @@ namespace API_Shopping.Controllers
                 result
             );
         }
+
+        [HttpPut("{id}")]
+        [Authorize(
+            AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,
+            Roles = "client"
+        )]
+        public async Task<IActionResult> PutItemQuantity(long id, ItemShoppingCartUpdateDTO itemDto)
+        {
+            if (id != itemDto.Id)
+                return BadRequest("Id mismatch");
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (userIdClaim == null)
+            {
+                return Unauthorized();
+            }
+
+            long userId = long.Parse(userIdClaim);
+            bool isUpdated = await _shoppingCartService.UpdateProductItemFromCart(itemDto.Id, itemDto.Quantity, userId);
+
+            if (isUpdated)
+            {
+                return NoContent();
+            }
+
+            if (!isUpdated)
+                return NotFound();
+
+            return NoContent();
+        }
     }
 }
