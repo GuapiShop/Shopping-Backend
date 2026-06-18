@@ -1,7 +1,0 @@
-﻿namespace API_Shopping.Exceptions
-{
-    public class OutOfStockException : Exception
-    {
-        public OutOfStockException(string message) : base(message) { }
-    }
-}

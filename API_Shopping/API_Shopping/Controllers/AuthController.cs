@@ -1,4 +1,6 @@
-﻿using API_Shopping.Models;
+﻿using API_Shopping.DTOs.Auth;
+using API_Shopping.Exceptions.Auth;
+using API_Shopping.Models;
 using API_Shopping.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,7 +14,7 @@ namespace API_Shopping.Controllers
     {
         private readonly JwtService _jwtService;
 
-        public AuthController(JwtService jwtService) {
+        public AuthController(JwtService jwtService) {  
             _jwtService = jwtService;
         }
 
@@ -23,7 +25,7 @@ namespace API_Shopping.Controllers
 
             if (findUser == null)
             {
-                return NotFound("Bad credentials");
+                throw new InvalidCredentialsException();
             }
             return Ok(new { message = "User found", token = _jwtService.JWTGenerator(findUser), role = findUser.Role});
         }
