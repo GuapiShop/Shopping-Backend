@@ -1,9 +1,10 @@
 using API_Shopping.Context;
 using API_Shopping.Interfaces;
+using API_Shopping.Middlewares;
 using API_Shopping.Services;
-using API_Shopping.Middleware;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -42,8 +43,6 @@ builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IDetailService, DetailService>(); 
 builder.Services.AddScoped<IShoppingCartService, ShoppingCartService>();
-
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -51,9 +50,30 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("NewPolicy", app=>{
-        //app.WithOrigins("") // use in production, don't use AllowAnyOrigin()
         app.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod(); 
     });
+});
+
+// Global Exception
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
+
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.InvalidModelStateResponseFactory = context =>
+    {
+        var errors = context.ModelState
+            .Where(e => e.Value.Errors.Count > 0)
+            .SelectMany(e => e.Value.Errors.Select(err => err.ErrorMessage));
+
+        return new BadRequestObjectResult(new ProblemDetails
+        {
+            Status = StatusCodes.Status400BadRequest,
+            Title = "Invalid request",
+            Detail = string.Join(" | ", errors),
+            Instance = context.HttpContext.Request.Path
+        });
+    };
 });
 
 var app = builder.Build();
@@ -66,15 +86,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthentication();
-
 app.UseCors("NewPolicy");
-
 app.UseAuthorization();
-
-app.UseMiddleware<ExceptionMiddleware>();
-
+app.UseExceptionHandler();
 app.MapControllers();
 
 app.Run();

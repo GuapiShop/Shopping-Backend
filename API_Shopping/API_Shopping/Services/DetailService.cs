@@ -1,8 +1,8 @@
 ﻿using API_Shopping.Context;
 using API_Shopping.DTOs.Detail;
-using API_Shopping.Exceptions;
 using API_Shopping.Interfaces;
 using API_Shopping.Models;
+using API_Shopping.Exceptions.Product;
 
 namespace API_Shopping.Services
 {
@@ -42,12 +42,12 @@ namespace API_Shopping.Services
 
                 if (product == null) 
                 {
-                    throw new ProductNotFoundException($"Product don't exist.");
+                    //throw new ProductNotFoundException();
                 }
 
                 if (product.Quantity < item.Quantity) 
                 {
-                    throw new OutOfStockException($"Stock insuficiente para {product.Name}");
+                    //throw new OutOfStockException();
                 }
 
                 product.Quantity -= item.Quantity;

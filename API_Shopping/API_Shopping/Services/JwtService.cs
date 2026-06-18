@@ -1,4 +1,5 @@
 ﻿using API_Shopping.Context;
+using API_Shopping.DTOs.Auth;
 using API_Shopping.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -37,10 +38,11 @@ namespace API_Shopping.Services
                 );
             return new JwtSecurityTokenHandler().WriteToken(jwtConfig);
         }
+
         public async Task<User> FindUserWithLogin(LoginDTO login) {
             var findUser = await _context.Users
                 .Where(u =>
-                u.Email == login.Email
+                u.Email.ToLower() == login.Email.ToLower()
                 ).FirstOrDefaultAsync();
 
             if (findUser != null && BCrypt.Net.BCrypt.Verify(login.Password, findUser.Password)) 
