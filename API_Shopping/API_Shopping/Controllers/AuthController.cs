@@ -21,6 +21,15 @@ namespace API_Shopping.Controllers
         [HttpPost]
         [Route("login")]
         public async Task<ActionResult<User>> Login(LoginDTO login) {
+
+            if (login.Email == null || login.Email == "") {
+                throw new EmptyEmailException();
+            }
+
+            if (login.Password == null || login.Password == "") { 
+                throw new EmptyPasswordException();
+            }
+
             User findUser = await _jwtService.FindUserWithLogin(login);
 
             if (findUser == null)
