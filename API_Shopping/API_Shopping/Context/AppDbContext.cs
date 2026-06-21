@@ -20,5 +20,7 @@ namespace API_Shopping.Context
         public DbSet<ShoppingCart> ShoppingCarts { get; set; }
 
         public DbSet<ItemShoppingCart> ItemShoppingCarts { get; set; }
+
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
     }
 }

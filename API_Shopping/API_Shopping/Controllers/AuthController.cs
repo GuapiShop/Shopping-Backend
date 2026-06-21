@@ -36,7 +36,30 @@ namespace API_Shopping.Controllers
             {
                 throw new InvalidCredentialsException();
             }
-            return Ok(new { message = "User found", token = _jwtService.JWTGenerator(findUser), role = findUser.Role});
+
+            var accessToken = _jwtService.JWTGenerator(findUser);
+            var refreshToken = await _jwtService.GenerateRefreshToken(findUser.Id);
+
+            return Ok(new
+            {
+                message = "User found",
+                token = accessToken,
+                refreshToken = refreshToken.Token,
+                role = findUser.Role
+            });
+        }
+
+        [HttpPost]
+        [Route("refresh")]
+        public async Task<ActionResult<TokenResponseDTO>> Refresh(RefreshTokenRequestDTO request)
+        {
+            if (request.RefreshToken == null || request.RefreshToken == "")
+            {
+                throw new InvalidRefreshTokenException();
+            }
+
+            var result = await _jwtService.RefreshAccessToken(request.RefreshToken);
+            return Ok(result);
         }
     }
 }
