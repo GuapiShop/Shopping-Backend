@@ -1,5 +1,6 @@
 ﻿using API_Shopping.Context;
 using API_Shopping.DTOs.Product;
+using API_Shopping.Exceptions.Product;
 using API_Shopping.Interfaces;
 using API_Shopping.Models;
 using Microsoft.EntityFrameworkCore;
@@ -10,17 +11,15 @@ namespace API_Shopping.Services
     {
         private readonly AppDbContext _context;
 
-        public ProductService(AppDbContext context) {
-            this._context = context;
+        public ProductService(AppDbContext context)
+        {
+            _context = context;
         }
 
-        //Add product
         public async Task<Product> AddProduct(ProductCreateDTO productDto)
         {
             if (productDto == null)
-            {
-                return null;
-            }
+                throw new ProductCreationException();
 
             var tempProduct = new Product
             {
@@ -41,7 +40,7 @@ namespace API_Shopping.Services
             return tempProduct;
         }
 
-        //List product
+        // List products for admin
         public async Task<object> GetProducts(int page = 1, int pageSize = 10)
         {
             var query = _context.Products.AsQueryable();
@@ -68,30 +67,24 @@ namespace API_Shopping.Services
                 })
                 .ToListAsync();
 
-            return new
-            {
-                page,
-                totalPage,
-                data = products
-            };
+            return new { page, totalPage, data = products };
         }
 
-        //List products to show to client
-        public async Task<object> GetCatalogProducts(int page=1, int pageSize=10, string category="")
+        // List products for client catalog
+        public async Task<object> GetCatalogProducts(int page = 1, int pageSize = 10, string category = "")
         {
             var query = _context.Products.AsQueryable();
 
             if (!string.IsNullOrEmpty(category))
-            {
-                query = query.Where(p => p.Category == category && p.IsActive==true);
-            }
+                query = query.Where(p => p.Category == category && p.IsActive == true);
 
             var totalItems = await query.CountAsync();
             var totalPage = (int)Math.Ceiling(totalItems / (double)pageSize);
 
             var products = await query
-                .Skip((page-1) * pageSize)
+                .Skip((page - 1) * pageSize)
                 .Take(pageSize)
+                .Where(u => u.IsActive == true)
                 .Select(u => new ProductResponseDTO
                 {
                     Id = u.Id,
@@ -102,28 +95,26 @@ namespace API_Shopping.Services
                     Quantity = u.Quantity,
                 })
                 .ToListAsync();
-            return new
-            {
-                page,
-                totalPage,
-                data = products,
-            };
+
+            return new { page, totalPage, data = products };
         }
 
-        //Get a single product
         public async Task<Product> GetProductById(long id)
         {
-            return await _context.Products.FindAsync(id);
+            var product = await _context.Products.FindAsync(id);
+
+            if (product == null)
+                throw new ProductNotFoundException(id);
+
+            return product;
         }
-        
-        //Update product
+
         public async Task<bool> UpdateProduct(long id, ProductUpdateDTO product)
         {
-            Product productFind = await GetProductById(id);
+            var productFind = await GetProductById(id);
+
             try
             {
-                if (productFind == null) return false;
-
                 productFind.Name = product.Name;
                 productFind.Description = product.Description;
                 productFind.Category = product.Category;
@@ -137,18 +128,18 @@ namespace API_Shopping.Services
             }
             catch (DbUpdateConcurrencyException)
             {
-                return false;
+                throw new ProductUpdateException(id);
             }
+
             return true;
         }
 
-        // disable product
         public async Task<bool> DisableProduct(long id)
         {
-            var product = await _context.Products.FirstOrDefaultAsync( p => p.Id == id);
+            var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == id);
 
-            if (product==null)
-                return false;
+            if (product == null)
+                throw new ProductNotFoundException(id);
 
             product.IsActive = false;
             product.UpdateAt = DateTime.UtcNow;
@@ -156,13 +147,12 @@ namespace API_Shopping.Services
             return true;
         }
 
-        // enable product
         public async Task<bool> EnableProduct(long id)
         {
             var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == id);
 
             if (product == null)
-                return false;
+                throw new ProductNotFoundException(id);
 
             product.IsActive = true;
             product.UpdateAt = DateTime.UtcNow;

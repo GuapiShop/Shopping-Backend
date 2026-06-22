@@ -55,6 +55,7 @@ namespace API_Shopping.Services
             return null;
         }
 
+        // method to test the validation of token into the Shopping.Tests
         public ClaimsPrincipal? ValidateToken(string token)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
