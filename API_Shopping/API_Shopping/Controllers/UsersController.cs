@@ -75,5 +75,14 @@ namespace API_Shopping.Controllers
             await _userService.EnableUser(id);
             return NoContent();
         }
+
+        // DELETE: api/users/{id}
+        [HttpDelete("{id}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
+        public async Task<IActionResult> DeleteUser(long id)
+        {
+            await _userService.DeleteUser(id);
+            return NoContent();
+        }
     }
 }
