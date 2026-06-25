@@ -1,4 +1,5 @@
 ﻿using API_Shopping.DTOs.User;
+using API_Shopping.Exceptions.User;
 using API_Shopping.Interfaces;
 using API_Shopping.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -18,124 +19,61 @@ namespace API_Shopping.Controllers
             _userService = userService;
         }
 
-        // GET: api/Users
+        // GET: api/users
         [HttpGet]
-        [Authorize(
-            AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,
-            Roles = "admin"
-        )]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
         public async Task<ActionResult> GetUsers(int page = 1, int pageSize = 10)
         {
             var data = await _userService.GetUsers(page, pageSize);
-            if (data == null) 
-            { 
-                return NoContent();
-            }else
-            {
-                return Ok(data);
-            }  
+            return Ok(data);
         }
 
-        // GET: api/Users/number
+        // GET: api/users/{id}
         [HttpGet("{id}")]
-        [Authorize(
-            AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,
-            Roles = "admin"
-        )]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
         public async Task<ActionResult<UserDTO>> GetUser(long id)
         {
             var user = await _userService.GetUserById(id);
-
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            return user;
+            return Ok(user);
         }
 
-        // PUT: api/Users/number
+        // PUT: api/users/{id}
         [HttpPut("{id}")]
-        [Authorize(
-            AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,
-            Roles = "admin"
-        )]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
         public async Task<IActionResult> PutUser(long id, UserUpdateDTO user)
         {
             if (id != user.Id)
-            {
-                return BadRequest();
-            }
+                throw new UserIdMismatchException();
 
-            if (!await _userService.UserExists(id))
-            {
-                return NotFound("User not found");
-            }
-
-            if (await _userService.UpdateUser(id, user))
-            { 
-                return NoContent();
-            }
-            
-            return StatusCode(500);
+            await _userService.UpdateUser(id, user);
+            return NoContent();
         }
 
-        // POST: api/Users
+        // POST: api/users
         [HttpPost]
         [AllowAnonymous]
         public async Task<ActionResult<User>> PostUser(UserCreateDTO user)
         {
             User result = await _userService.AddUser(user);
-            if (result != null)
-            {
-                return CreatedAtAction("GetUser", new { id = result.Id }, user);
-            }
-            else
-            {
-                return BadRequest();
-            }
+            return CreatedAtAction(nameof(GetUser), new { id = result.Id }, result);
         }
 
-        // PUT: api/Users/disable/number
+        // PUT: api/users/disable/{id}
         [HttpPut("disable/{id}")]
-        [Authorize(
-            AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,
-            Roles = "admin"
-        )]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
         public async Task<IActionResult> DisableUser(long id)
         {
-            if (!await _userService.UserExists(id))
-            {
-                return NotFound("User not found");
-            }
-
-            if (await _userService.DisableUser(id)) 
-            {
-                return NoContent();
-            }
-
-            return StatusCode(500);
+            await _userService.DisableUser(id);
+            return NoContent();
         }
 
-        // PUT: api/Users/enable/number
+        // PUT: api/users/enable/{id}
         [HttpPut("enable/{id}")]
-        [Authorize(
-            AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,
-            Roles = "admin"
-        )]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
         public async Task<IActionResult> EnableUser(long id)
         {
-            if (!await _userService.UserExists(id))
-            {
-                return NotFound("User not found");
-            }
-
-            if (await _userService.EnableUser(id))
-            {
-                return NoContent();
-            }
-
-            return StatusCode(500);
+            await _userService.EnableUser(id);
+            return NoContent();
         }
     }
 }

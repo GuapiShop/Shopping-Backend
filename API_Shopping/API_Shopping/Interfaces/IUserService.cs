@@ -5,12 +5,13 @@ namespace API_Shopping.Interfaces
 {
     public interface IUserService
     {
-        public Task<object> GetUsers( int page, int pageSize );
-        public Task<UserDTO> GetUserById(long id);
         public Task<User> AddUser(UserCreateDTO user);
-        public Task<bool> UpdateUser(long id, UserUpdateDTO user);
-        public Task<bool> DisableUser(long id);
-        public Task<bool> EnableUser(long id);
+        public Task DisableUser(long id);
+        public Task EnableUser(long id);
         public Task<bool> UserExists(long id);
+        public Task<UserDTO> GetUserById(long id);
+        public Task<object> GetUsers( int page, int pageSize );
+        public Task UpdateUser(long id, UserUpdateDTO user);
+
     }
 }
