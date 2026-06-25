@@ -1,5 +1,6 @@
 ﻿using API_Shopping.Context;
 using API_Shopping.DTOs.User;
+using API_Shopping.Exceptions.User;
 using API_Shopping.Interfaces;
 using API_Shopping.Models;
 using Microsoft.EntityFrameworkCore;
@@ -10,67 +11,70 @@ namespace API_Shopping.Services
     {
         private readonly AppDbContext _context;
 
-        public UserService(AppDbContext context) { 
+        public UserService(AppDbContext context)
+        {
             _context = context;
         }
 
-        // Add a user
         public async Task<User> AddUser(UserCreateDTO user)
         {
+            bool emailTaken = await _context.Users.AnyAsync(u => u.Email == user.Email);
+            if (emailTaken)
+                throw new UserAlreadyExistsException("email", user.Email);
+
+            bool usernameTaken = await _context.Users.AnyAsync(u => u.Username == user.Username);
+            if (usernameTaken)
+                throw new UserAlreadyExistsException("username", user.Username);
+
             var userTemp = new User
             {
                 Username = user.Username,
-                Password = BCrypt.Net.BCrypt.HashPassword(user.Password), 
+                Password = BCrypt.Net.BCrypt.HashPassword(user.Password),
                 Email = user.Email,
                 IsActive = true,
-                CreateAt = DateTime.Now,
+                CreateAt = DateTime.UtcNow,
                 Role = "client",
             };
+
             _context.Users.Add(userTemp);
             await _context.SaveChangesAsync();
             return userTemp;
         }
 
-        // Disable user
-        public async Task<bool> DisableUser(long id)
+        public async Task DisableUser(long id)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id)
+                ?? throw new UserNotFoundException(id);
 
-            if (user == null)
-                return false;
+            if (user.IsActive == false)
+                throw new UserAlreadyDisabledException(id);
 
             user.IsActive = false;
             user.UpdateAt = DateTime.UtcNow;
-
             await _context.SaveChangesAsync();
-            return true;
         }
 
-        // Enable user
-        public async Task<bool> EnableUser(long id)
+        public async Task EnableUser(long id)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id)
+                ?? throw new UserNotFoundException(id);
 
-            if (user == null)
-                return false;
+            if (user.IsActive == true)
+                throw new UserAlreadyEnabledException(id);
 
             user.IsActive = true;
             user.UpdateAt = DateTime.UtcNow;
-
             await _context.SaveChangesAsync();
-            return true;
         }
 
-        // Verify existence
         public async Task<bool> UserExists(long id)
         {
             return await _context.Users.AnyAsync(e => e.Id == id);
         }
 
-        // Get user by id
         public async Task<UserDTO> GetUserById(long id)
         {
-            return await _context.Users
+            var user = await _context.Users
                 .Where(u => u.Id == id)
                 .Select(u => new UserDTO
                 {
@@ -82,11 +86,18 @@ namespace API_Shopping.Services
                     Username = u.Username,
                     Role = u.Role,
                 }).FirstOrDefaultAsync();
+
+            if (user == null)
+                throw new UserNotFoundException(id);
+
+            return user;
         }
 
-        // Get list of user paged
         public async Task<object> GetUsers(int page = 1, int pageSize = 10)
         {
+            if (page < 1 || pageSize < 1)
+                throw new InvalidPaginationException();
+
             var query = _context.Users.AsQueryable();
 
             var totalItems = await query.CountAsync();
@@ -95,40 +106,41 @@ namespace API_Shopping.Services
             var users = await query
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
-                .Select(u => new UserDTO 
+                .Select(u => new UserDTO
                 {
                     Id = u.Id,
                     Email = u.Email,
                     CreateAt = u.CreateAt,
                     IsActive = u.IsActive,
                     UpdateAt = u.UpdateAt,
-                    Username = u.Username, 
+                    Username = u.Username,
                     Role = u.Role,
                 })
                 .ToListAsync();
 
-            return new
-            {
-                page,
-                totalPage, 
-                data = users
-            };
+            return new { page, totalPage, data = users };
         }
 
-        // Update user
-        public async Task<bool> UpdateUser(long id, UserUpdateDTO userDto)
+        public async Task UpdateUser(long id, UserUpdateDTO userDto)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id)
+                ?? throw new UserNotFoundException(id);
 
-            if (user == null)
-                return false;
+            bool emailTaken = await _context.Users
+                .AnyAsync(u => u.Email == userDto.Email && u.Id != id);
+            if (emailTaken)
+                throw new UserAlreadyExistsException("email", userDto.Email);
+
+            bool usernameTaken = await _context.Users
+                .AnyAsync(u => u.Username == userDto.Username && u.Id != id);
+            if (usernameTaken)
+                throw new UserAlreadyExistsException("username", userDto.Username);
 
             user.Username = userDto.Username;
             user.Email = userDto.Email;
             user.UpdateAt = DateTime.UtcNow;
 
             await _context.SaveChangesAsync();
-            return true;
         }
     }
 }
