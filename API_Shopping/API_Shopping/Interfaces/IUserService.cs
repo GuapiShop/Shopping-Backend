@@ -12,6 +12,6 @@ namespace API_Shopping.Interfaces
         public Task<UserDTO> GetUserById(long id);
         public Task<object> GetUsers( int page, int pageSize );
         public Task UpdateUser(long id, UserUpdateDTO user);
-
+        public Task DeleteUser(long id);
     }
 }

@@ -142,5 +142,14 @@ namespace API_Shopping.Services
 
             await _context.SaveChangesAsync();
         }
+
+        public async Task DeleteUser(long id)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id)
+                ?? throw new UserNotFoundException(id);
+
+            _context.Users.Remove(user);
+            await _context.SaveChangesAsync();
+        }
     }
 }
