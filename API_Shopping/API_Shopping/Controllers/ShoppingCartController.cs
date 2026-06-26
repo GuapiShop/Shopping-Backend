@@ -1,8 +1,6 @@
-﻿using API_Shopping.DTOs.Product;
-using API_Shopping.DTOs.ShoppingCart;
+﻿using API_Shopping.DTOs.ShoppingCart;
 using API_Shopping.Interfaces;
 using API_Shopping.Models;
-using API_Shopping.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -17,115 +15,52 @@ namespace API_Shopping.Controllers
     {
         private readonly IShoppingCartService _shoppingCartService;
 
-        public ShoppingCartController(IShoppingCartService shoppingCartService) {
-            this._shoppingCartService = shoppingCartService;
+        public ShoppingCartController(IShoppingCartService shoppingCartService)
+        {
+            _shoppingCartService = shoppingCartService;
         }
 
+        private long GetUserId() =>
+            long.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)
+                ?? throw new UnauthorizedAccessException("User identity not found."));
+
+        // GET: api/shopping-cart
         [HttpGet]
-        [Authorize(
-            AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,
-            Roles = "client"
-        )]
+        [Authorize(Roles = "client")]
         public async Task<ActionResult<ShoppingCart>> GetShoppingCart()
         {
-            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-            if (userIdClaim == null)
-            {
-                return Unauthorized();
-            }
-
-            long userId = long.Parse(userIdClaim);
-
-            var data = await _shoppingCartService.GetOrCreateShoppingCart(userId);
-
+            var data = await _shoppingCartService.GetOrCreateShoppingCart(GetUserId());
             return Ok(data);
         }
 
+        // POST: api/shopping-cart
         [HttpPost]
-        [Authorize(
-            AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,
-            Roles = "client"
-        )]
+        [Authorize(Roles = "client")]
         public async Task<ActionResult<ShoppingCart>> AddItemIntoCart(ItemShoppingCartCreateDTO item)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-            if (userIdClaim == null)
-            {
-                return Unauthorized();
-            }
-
-            long userId = long.Parse(userIdClaim);
-
-            var result = await _shoppingCartService.AddProductIntoCart(item, userId);
-
-            return CreatedAtAction(
-                nameof(GetShoppingCart),
-                new { userId = userId },
-                result
-            );
+            var result = await _shoppingCartService.AddProductIntoCart(item, GetUserId());
+            return CreatedAtAction(nameof(GetShoppingCart), result);
         }
 
+        // PUT: api/shopping-cart/{id}
         [HttpPut("{id}")]
-        [Authorize(
-            AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,
-            Roles = "client"
-        )]
+        [Authorize(Roles = "client")]
         public async Task<IActionResult> PutItemQuantity(long id, ItemShoppingCartUpdateDTO itemDto)
         {
             if (id != itemDto.Id)
-                return BadRequest("Id mismatch");
+                return BadRequest("Id mismatch.");
 
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-            if (userIdClaim == null)
-            {
-                return Unauthorized();
-            }
-
-            long userId = long.Parse(userIdClaim);
-            bool isUpdated = await _shoppingCartService.UpdateProductItemFromCart(itemDto.Id, itemDto.Quantity, userId);
-
-            if (isUpdated)
-            {
-                return NoContent();
-            }
-
-            if (!isUpdated)
-                return NotFound();
-
+            await _shoppingCartService.UpdateProductItemFromCart(itemDto.Id, itemDto.Quantity, GetUserId());
             return NoContent();
         }
 
-        [HttpDelete]
-        [Authorize(
-            AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,
-            Roles = "client"
-        )]
+        // DELETE: api/shopping-cart/{id}
+        [HttpDelete("{id}")]
+        [Authorize(Roles = "client")]
         public async Task<IActionResult> DeleteItemCart(long id)
         {
-            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-            if (userIdClaim == null)
-            {
-                return Unauthorized();
-            }
-
-            long userId = long.Parse(userIdClaim);
-
-            if (await _shoppingCartService.DeleteProductItemFromCart(id, userId))
-            {
-                return NoContent();
-            }
-
-            return StatusCode(500);
+            await _shoppingCartService.DeleteProductItemFromCart(id, GetUserId());
+            return NoContent();
         }
     }
 }
