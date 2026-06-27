@@ -1,6 +1,7 @@
 ﻿using API_Shopping.Context;
 using API_Shopping.DTOs.ShoppingCart;
 using API_Shopping.Enums;
+using API_Shopping.Exceptions.Product;
 using API_Shopping.Exceptions.ShoppingCart;
 using API_Shopping.Interfaces;
 using API_Shopping.Models;
