@@ -14,30 +14,31 @@ namespace API_Shopping.Controllers
     public class DetailController : ControllerBase
     {
         private readonly IDetailService _detailService;
+
         public DetailController(IDetailService detailService)
         {
             _detailService = detailService;
         }
 
-        //POST: api/Detail
+        private long GetUserId() =>
+            long.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)
+                ?? throw new UnauthorizedAccessException("User identity not found."));
+
+        // POST: api/details
         [HttpPost]
-        [Authorize(
-            AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,
-            Roles = "client"
-        )]
-        public async Task<ActionResult<Order>> AddDetail(DetailCreateDTO[] detailDto)
+        [Authorize(Roles = "client")]
+        public async Task<ActionResult<Order>> AddDetail()
         {
-            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var result = await _detailService.AddDetails(GetUserId());
+            return CreatedAtAction(nameof(AddDetail), new { id = result.Id }, result);
+        }
 
-            if (userIdClaim == null)
-            {
-                return Unauthorized();
-            }
-
-            long userId = long.Parse(userIdClaim);
-
-            var result = await _detailService.AddDetails(userId, detailDto);
-
+        // GET: api/details/pending
+        [HttpGet("pending")]
+        [Authorize(Roles = "client")]
+        public async Task<ActionResult<List<PendingOrderDTO>>> GetPendingOrders()
+        {
+            var result = await _detailService.GetPendingOrders(GetUserId());
             return Ok(result);
         }
     }

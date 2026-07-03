@@ -5,6 +5,7 @@ namespace API_Shopping.Interfaces
 {
     public interface IDetailService
     {
-        public Task<Order> AddDetails(long userId, DetailCreateDTO[] details);
+        public Task<Order> AddDetails(long userId);
+        Task<List<PendingOrderDTO>> GetPendingOrders(long userId);
     }
 }
