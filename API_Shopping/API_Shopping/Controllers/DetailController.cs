@@ -27,9 +27,9 @@ namespace API_Shopping.Controllers
         // POST: api/details
         [HttpPost]
         [Authorize(Roles = "client")]
-        public async Task<ActionResult<Order>> AddDetail(DetailCreateDTO[] detailDto)
+        public async Task<ActionResult<Order>> AddDetail()
         {
-            var result = await _detailService.AddDetails(GetUserId(), detailDto);
+            var result = await _detailService.AddDetails(GetUserId());
             return CreatedAtAction(nameof(AddDetail), new { id = result.Id }, result);
         }
 

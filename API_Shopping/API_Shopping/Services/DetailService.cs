@@ -1,5 +1,6 @@
 ﻿using API_Shopping.Context;
 using API_Shopping.DTOs.Detail;
+using API_Shopping.Enums;
 using API_Shopping.Exceptions.Detail;
 using API_Shopping.Exceptions.Product;
 using API_Shopping.Exceptions.ShoppingCart;
@@ -19,22 +20,21 @@ namespace API_Shopping.Services
             _context = context;
         }
 
-        public async Task<Order> AddDetails(long userId, DetailCreateDTO[] detailsDto)
+        public async Task<Order> AddDetails(long userId)
         {
-            if (detailsDto == null || detailsDto.Length == 0)
-                throw new DetailEmptyException();
-
-            // Validate each item quantity before touching the DB
-            foreach (var item in detailsDto)
-            {
-                if (item.Quantity <= 0)
-                    throw new InvalidQuantityException();
-            }
-
-            using var transaction = await _context.Database.BeginTransactionAsync();
-
             var user = await _context.Users.FindAsync(userId)
                 ?? throw new UserNotFoundException(userId);
+
+            var cart = await _context.ShoppingCarts
+                .Include(c => c.ItemShoppingCarts)
+                    .ThenInclude(i => i.Product)
+                .FirstOrDefaultAsync(c => c.UserId == userId && c.Status == ShoppingCartStatus.Pending)
+                ?? throw new CartItemNotFoundException(userId);
+
+            if (!cart.ItemShoppingCarts.Any())
+                throw new EmptyCartException();
+
+            using var transaction = await _context.Database.BeginTransactionAsync();
 
             var order = new Order
             {
@@ -46,14 +46,15 @@ namespace API_Shopping.Services
             _context.Orders.Add(order);
             await _context.SaveChangesAsync();
 
-            foreach (var item in detailsDto)
+            foreach (var item in cart.ItemShoppingCarts)
             {
-                var product = await _context.Products
-                    .FirstOrDefaultAsync(p => p.Id == item.ProductId && p.IsActive == true)
-                    ?? throw new ProductNotFoundException(item.ProductId);
+                var product = item.Product;
+
+                if (product == null || !product.IsActive)
+                    throw new ProductNotFoundException(item.productId);
 
                 if (product.Quantity < item.Quantity)
-                    throw new InsufficientStockException(product.Id, product.Quantity);
+                    throw new OutOfStockException("Out of stock");
 
                 product.Quantity -= item.Quantity;
 
@@ -69,6 +70,9 @@ namespace API_Shopping.Services
                 _context.Details.Add(detail);
                 _context.Products.Update(product);
             }
+
+            _context.ItemShoppingCarts.RemoveRange(cart.ItemShoppingCarts);
+            _context.ShoppingCarts.Remove(cart);
 
             await _context.SaveChangesAsync();
             await transaction.CommitAsync();
